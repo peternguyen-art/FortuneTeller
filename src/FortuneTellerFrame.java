@@ -1,6 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
+
+import static java.lang.System.*;
 
 public class FortuneTellerFrame extends JFrame {
 
@@ -17,6 +22,10 @@ public class FortuneTellerFrame extends JFrame {
 
     JButton readFortune;
     JButton quitBtn;
+
+    ArrayList<String> fortunes = new ArrayList<>();
+    Random rnd = new Random();
+    int lastFortune = -1;
 
     public FortuneTellerFrame() {
         mainPnl = new JPanel();
@@ -56,11 +65,11 @@ public class FortuneTellerFrame extends JFrame {
 
     private void createMidPnl(){
         midPnl = new JPanel();
-        textArea = new JTextArea(8,20);
+        textArea = new JTextArea(10,25);
         scrollPane = new JScrollPane(textArea);
 
         textArea.setEditable(false);
-        textArea.setFont(new Font("Serif", Font.PLAIN, 20));
+        textArea.setFont(new Font("Serif", Font.PLAIN, 16));
         midPnl.add(scrollPane);
     }
 
@@ -71,11 +80,37 @@ public class FortuneTellerFrame extends JFrame {
         readFortune = new JButton("Read My Fortune!");
         readFortune.setFont(new Font("Dialog", Font.BOLD, 16));
 
+        fortunes.add("Worry about the future, but only after your first coffee.");
+        fortunes.add("Today is a good day to leave your laundry on the floor.");
+        fortunes.add("Your procrastination will be rewarded... later.");
+        fortunes.add("The key to happiness is forgetting the key to happiness.");
+        fortunes.add("A startling new realization will hit you during a boring meeting.");
+        fortunes.add("The person who most annoys you is secretly your twin.");
+        fortunes.add("Expect an important call... from a telemarketer.");
+        fortunes.add("You'll finally learn what that weird noise in your car is.");
+        fortunes.add("Your next great idea appears when you're trying to sleep.");
+        fortunes.add("You're a great conversationalist, on the topic of your dog.");
+        fortunes.add("The shortest answer is doing the dishes yourself.");
+        fortunes.add("A valuable lesson will be learned after stepping in something wet.");
+
+        readFortune.addActionListener((ActionEvent ae) -> {
+            int nextFortune = lastFortune;
+
+            while (nextFortune == lastFortune) {
+                nextFortune = rnd.nextInt(fortunes.size());
+            }
+
+            textArea.append(fortunes.get(nextFortune) + "\n");
+
+            lastFortune = nextFortune;
+        });
+
         quitBtn = new JButton("Quit");
         quitBtn.setFont(new Font("Dialog", Font.BOLD, 16));
-        quitBtn.addActionListener((ActionEvent ae) -> System.exit(0));
+        quitBtn.addActionListener((ActionEvent ae) -> exit(0));
 
         bottomPnl.add(readFortune);
         bottomPnl.add(quitBtn);
     }
+
 }
